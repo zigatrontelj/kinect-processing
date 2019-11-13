@@ -1,4 +1,4 @@
-import KinectPV2.KJoint; //<>//
+import KinectPV2.KJoint;
 import KinectPV2.*;
 
 //*************************
@@ -331,178 +331,13 @@ void handState(int handState) {
   }
 }
 
-class ParticleGravitySystem {
-
-  ArrayList<ParticleGravity> particles;    // An arraylist for all the particles
-  PVector origin;   // An origin point for where particles are birthed
-  PVector acceleration;
-
-  ParticleGravitySystem(int num, PVector v, PVector a) {
-    particles = new ArrayList<ParticleGravity>();   // Initialize the arraylist
-    origin = v.copy();                        // Store the origin point
-    a = a.copy();
-    for (int i = 0; i < num; i++) {
-      particles.add(new ParticleGravity(origin, a));    // Add "num" amount of particles to the arraylist
-    }
-  }
-
-
-  void run() {
-    // Cycle through the ArrayList backwards, because we are deleting while iterating
-    for (int i = particles.size()-1; i >= 0; i--) {
-      ParticleGravity p = particles.get(i);
-      p.run();
-      if (p.isDead()) {
-        particles.remove(i);
-      }
-    }
-  }
-
-  void addParticleGravity() {
-    ParticleGravity p;
-    // Add either a ParticleGravity or CrazyParticleGravity to the system
-    p = new ParticleGravity(origin, new PVector(0, 0.08));
-    particles.add(p);
-  }
-
-  void addParticleGravity(ParticleGravity p) {
-    particles.add(p);
-  }
-
-  // A method to test if the particle system still has particles
-  boolean dead() {
-    return particles.isEmpty();
-  }
-}
-
-
-// A simple ParticleGravity class
-
-class ParticleGravity {
-  PVector position;
-  PVector velocity;
-  PVector acceleration;
-  float lifespan;
-
-  ParticleGravity(PVector l, PVector a) {
-    acceleration = a;
-    velocity = new PVector(random(-2, 1), random(-3, 0));
-    position = l.copy();
-    lifespan = 255.0;
-  }
-
-  void run() {
-    update();
-    display();
-  }
-
-  // Method to update position
-  void update() {
-    velocity.add(acceleration);
-    position.add(velocity);
-    lifespan -= 2.0;
-  }
-
-  // Method to display
-  void display() {
-    stroke(255, lifespan);
-    fill(255, lifespan);
-    ellipse(position.x, position.y, 1, 1);
-  }
-
-  // Is the particle still useful?
-  boolean isDead() {
-    return (lifespan < 0.0);
-  }
-}
 
 
 
-//Floating particles
 
-class ParticleSystem {
-  ArrayList<Particle> particles;
-  PVector origin;
- 
-  ParticleSystem(PVector position) {
-    origin = position.copy();
-    particles = new ArrayList<Particle>();
-  }
- 
-  void addParticle() {
-    particles.add(new Particle(origin));
-  }
- 
-  void run() {
-    for (int i = particles.size()-1; i >= 0; i--) {
-      Particle p = particles.get(i);
-      p.run();
-//      if (p.isDead()) {
-        //    particles.remove(i);
-//      }
-    }
-  }
-  void move_away_from( float x, float y, int radious){
-    for(Particle p : particles){
-      float d = dist(x,y,p.position.x, p.position.y);
-      if( d < radious ){ // Only move points near click.
-        p.velocity.x += map(d,0,radious,0.5,0.1)*(p.position.x - x);
-        p.velocity.y += map(d,0,radious,0.5,0.1)*(p.position.y - y);
-      }
-    }
-  }
- 
-}
+
+
+
+
  
  
-class Particle {
-  PVector position;
-  PVector velocity;
-  PVector acceleration;
-  float lifespan;
- 
-  PVector home;
- 
-  Particle(PVector l) {
-    acceleration = new PVector(0, 0);
-    velocity = new PVector(0,0);//random(-0.0001, 0.00001), random(-0.001, 0.0001));
- 
-    l=new PVector(random(0, screenwidth), random(0, screenheight));
-    position = l.copy();
-    home = position.copy();
-    lifespan = 255.0;
-  }
- 
-  void run() {
-    update();
-    display();
-  }
- 
-  // Method to update position
-  void update() {
-    acceleration.x = -0.01*(position.x - home.x);
-    acceleration.y = -0.01*(position.y - home.y);
-    velocity.add(acceleration);
-    velocity.mult(0.9);
-    position.add(velocity);
-    //   lifespan -= 1.0;
-  }
- 
-  // Method to display
-  void display() {
-    noStroke();//stroke(255, lifespan);
-    //fill(255, lifespan);
-    float notblue = map(abs(velocity.mag()),0,5,255,0); 
-    fill(notblue,notblue,255);
-    ellipse(position.x, position.y, 4, 4);
-  }
- 
-  // Is the particle still useful?
-  boolean isDead() {
-    if (lifespan < 0.0) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-}

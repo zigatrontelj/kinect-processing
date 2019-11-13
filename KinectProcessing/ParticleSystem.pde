@@ -1,5 +1,4 @@
-//Floating particles
-
+//Floating particles systems
 class ParticleSystem {
   ArrayList<Particle> particles;
   PVector origin;

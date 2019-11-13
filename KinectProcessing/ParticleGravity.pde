@@ -1,5 +1,4 @@
-// A simple ParticleGravity class
-
+//Particle that gets generated
 class ParticleGravity {
   PVector position;
   PVector velocity;

@@ -1,3 +1,4 @@
+//Gravity particles system
 class ParticleGravitySystem {
 
   ArrayList<ParticleGravity> particles;    // An arraylist for all the particles
@@ -27,7 +28,7 @@ class ParticleGravitySystem {
 
   void addParticleGravity() {
     ParticleGravity p;
-    // Add either a ParticleGravity or CrazyParticleGravity to the system
+    // Add a ParticleGravity to the system
     p = new ParticleGravity(origin, new PVector(0, 0.08));
     particles.add(p);
   }

@@ -1,3 +1,4 @@
+//Particle that floats arround
 class Particle {
   PVector position;
   PVector velocity;

@@ -1,7 +1,7 @@
 import KinectPV2.KJoint;
 import KinectPV2.*;
 
-//*************************
+//************************* 
 boolean testMode = false;
 static final int screenwidth = 1920;
 static final int screenheight = 1080;
@@ -55,7 +55,7 @@ void draw() {
   
   ArrayList<KSkeleton> skeletonArray =  kinect.getSkeletonColorMap();
   
-  //Omeji delovanje na 2 skeletona
+  //Limits skeleton array to 2 skeletons
   if(skeletonArray.size() > 2){
     skeletonArray.subList(2, skeletonArray.size()).clear();
   }
@@ -112,7 +112,7 @@ void draw() {
         ps2.addParticleGravity(new ParticleGravity(new PVector(leftjoint.getX(), leftjoint.getY()), new PVector(0, accel)));
       }
       
-      //Plosk
+      //If person claps
       if(PointsTouching(leftjoint, rightjoint) && clapcount > 30){
          clap = true;
          
@@ -125,6 +125,8 @@ void draw() {
           clapcount++;
       }
       
+      
+      //If 2 people are tracked
       if(skeletonArray.size() > 1){
         
         KSkeleton skeleton1 = (KSkeleton) skeletonArray.get(0);
@@ -137,7 +139,7 @@ void draw() {
         
         KJoint spine2 = joints2[KinectPV2.JointType_SpineMid];
         
-        //Ce sta dovolj blizu
+        //If 2 people are close enough
         if(PointsClose(spine1, spine2)){
            ps.move_away_from((spine1.getX()+spine2.getX())/2, (spine1.getY()+spine2.getY())/2, 500);
         }
@@ -150,7 +152,7 @@ void draw() {
       ps2.run();
       ps3.run();
       
-      
+      //If variable testMode is true, we can see how Kinect detects joints and if they align with point cloud image
       if(testMode == true){
         drawBody(joints);
         drawHandState(joints[KinectPV2.JointType_HandRight]);
@@ -172,7 +174,7 @@ void draw() {
   // Get the raw depth as array of integers
   int[] depth = kinect.getRawDepthData();
 
-
+  //Change color if person claps
   if(clap == true){
     stroke(colors[colorpoint%6][0], colors[colorpoint%6][1], colors[colorpoint%6][2]);
     colorpoint++;
@@ -187,8 +189,7 @@ void draw() {
       int offset = x + y * 512;
       int d = depth[offset];
       
-      //Izračunaj x,y,z na podlagi informacije o globini
-      //calculte the x, y, z camera position based on the depth information
+      //Calculte the x, y, z camera position based on the depth information
       PVector point = depthToPointCloudPos(x, y, d);
 
       // Draw a point
@@ -207,7 +208,7 @@ void draw() {
 
 }
 
-//calculte the xyz camera position based on the depth data
+//Calculte the xyz camera position based on the depth data
 PVector depthToPointCloudPos(int x, int y, float depthValue) {
   PVector point = new PVector();
   point.z = (depthValue);// / (1.0f); // Convert from mm to meters
@@ -280,7 +281,7 @@ void drawBody(KJoint[] joints) {
   drawJoint(joints, KinectPV2.JointType_Head);
 }
 
-//draw joint
+//Draw joint
 void drawJoint(KJoint[] joints, int jointType) {
   pushMatrix();
   translate(joints[jointType].getX(), joints[jointType].getY(), joints[jointType].getZ());
@@ -288,7 +289,7 @@ void drawJoint(KJoint[] joints, int jointType) {
   popMatrix();
 }
 
-//draw bone
+//Draw bone
 void drawBone(KJoint[] joints, int jointType1, int jointType2) {
   pushMatrix();
   translate(joints[jointType1].getX(), joints[jointType1].getY(), joints[jointType1].getZ());
@@ -297,7 +298,7 @@ void drawBone(KJoint[] joints, int jointType1, int jointType2) {
   line(joints[jointType1].getX(), joints[jointType1].getY(), joints[jointType1].getZ(), joints[jointType2].getX(), joints[jointType2].getY(), joints[jointType2].getZ());
 }
 
-//draw hand state
+//Draw hand state
 void drawHandState(KJoint joint) {
   noStroke();
   handState(joint.getState());
